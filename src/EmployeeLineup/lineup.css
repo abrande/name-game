@@ -1,0 +1,18 @@
+.lineup-container {
+    padding-top: 45px;
+}
+
+.employee-thumbnail{
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+}
+
+
+.card-img-overlay-success {
+    background-color: rgba(0, 255, 0, .5);
+}
+
+.card-img-overlay-fail {
+    background-color: rgba(255, 0, 0, .5);
+}
