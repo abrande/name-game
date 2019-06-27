@@ -3,22 +3,13 @@ import {Card} from "react-bootstrap";
 
 
 class EmployeeCards extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            wasMatch: null,
-            overlayClass: ''
-        }
-    }
-
-    returnResults(employee) {
-        let wasMatch = this.props.checkMatch(employee);
-        this.setState({isActive: employee.id, wasMatch: wasMatch});
+    returnResults(index) {
+        this.props.checkMatch(index, this.props.isMatch);
     }
 
     returnOverlay(employee) {
-        if (this.props.isActive) {
-            if (this.state.wasMatch) {
+        if (this.props.selected) {
+            if (this.props.isMatch) {
                 return (
                     <Card.ImgOverlay className='card-img-overlay-success'>
                         <Card.Title>{employee.firstName} {employee.lastName}</Card.Title>

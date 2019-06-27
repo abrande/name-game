@@ -1,5 +1,5 @@
 import React from "react"
-import {Jumbotron, Container, Row, Col} from "react-bootstrap";
+import {Container, Row, Col} from "react-bootstrap";
 import {getRandomSelection, getRandomInt} from "../utils/randomHelpers";
 import EmployeeCards from "./EmployeeCards";
 import "./lineup.css";
@@ -9,8 +9,8 @@ class EmployeeLineup extends React.Component {
         super(props);
         this.state = {
             employeeList: [],
-            selectedEmployees: [],
-            employeeToGuess: "",
+            selectedEmployees: Array(5).fill(false),
+            employeeToGuess: {},
             indexToGuess:  null,
             activeIndex: null
         };
@@ -18,21 +18,62 @@ class EmployeeLineup extends React.Component {
     }
 
     componentDidMount() {
-        this.getSelections();
+        this.getNewSelections();
     }
 
-    getSelections() {
-        let selected = getRandomSelection(this.props.employees, 5);
-        let choice = getRandomInt(6);
+    componentDidUpdate(prevProps) {
+        if (prevProps.mattGameSelected !== this.props.mattGameSelected) {
+            this.getNewSelections();
+        }
+    }
+
+    getNewSelections() {
+        let selected;
+        if (this.props.mattGameSelected) {
+            let matts = this.props.employees.filter(employee => {
+                return employee.firstName.toLowerCase.startsWith("mat");
+            });
+            selected = getRandomSelection(matts, 5);
+        }
+        else {
+            selected = getRandomSelection(this.props.employees, 5);
+        }
+        let choice = getRandomInt(5);
         this.setState({employeeList: selected, employeeToGuess: selected[choice], indexToGuess: choice});
     }
 
+    /* checkMatch() uses the index of the card selected and sets the value for that index to true or false
+     * in selectedEmployees. This so we can keep track of individual cards when selecting. After it will
+      * return whether it is a match to the asked name*/
+    checkMatch(id, isMatch) {
+        const wasSelected = this.state.selectedEmployees.slice();
+        this.setState({
+            activeIndex: id
+        });
+        if (wasSelected[id] === false) {
+            wasSelected[id] = !wasSelected[id];
+            this.setState(prevState => ({
+                selectedEmployees: wasSelected
+            }))
+        }
 
-    checkMatch(id) {
-        let list = this.state.selectedEmployees;
-        list.push(id);
-        this.setState({selectedEmployees: list, activeIndex: id});
-        return id === this.state.indexToGuess;
+        if (this.props.startKeepingScore) {
+            if (isMatch) {
+                this.props.addPoint();
+            }
+            else {
+                this.props.removePoint();
+            }
+        }
+
+        if (isMatch) {
+            setTimeout(this.handleCorrectGuess.bind(this), 500);
+        }
+    }
+
+    handleCorrectGuess() {
+        this.setState({selectedEmployees: Array(5).fill(false)});
+        this.getNewSelections();
     }
 
     createCards() {
@@ -43,7 +84,8 @@ class EmployeeLineup extends React.Component {
                         index={index}
                         employee={employee}
                         checkMatch={this.checkMatch}
-                        isActive={index === this.state.activeIndex}
+                        isMatch={employee === this.state.employeeToGuess}
+                        selected={this.state.selectedEmployees[index]}
                     />
                 </Col>
             )
@@ -52,7 +94,7 @@ class EmployeeLineup extends React.Component {
 
     render() {
         return (
-            <Jumbotron fluid>
+            <div className="employee-lineup-container">
                 <h1>Who is {this.state.employeeToGuess.firstName} {this.state.employeeToGuess.lastName}?</h1>
                 <div className="lineup-container">
                     <Container fluid>
@@ -62,7 +104,7 @@ class EmployeeLineup extends React.Component {
                         </Row>
                     </Container>
                 </div>
-            </Jumbotron>
+            </div>
         )
     }
 }
