@@ -1,3 +1,4 @@
+// Tutorial for this countdown timer can be found at https://spin.atomicobject.com/2018/11/08/countdown-timer-react-typescript/
 import React from "react";
 import "./timer.css";
 
@@ -39,7 +40,7 @@ class Timer extends React.Component {
                             cx="26"
                             cy="26"
                             style={{
-                                animation: `countdown-animation ${this.state.timerAmountSelected}ss linear`
+                                animation: `countdown-animation ${this.state.timerAmountSelected}s linear`
                             }}
                         />
                     </svg>

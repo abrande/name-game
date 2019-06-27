@@ -1,3 +1,11 @@
+@import url('https://fonts.googleapis.com/css?family=Buda:300|Muli&display=swap');
+
+.game-container {
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 25px;
+}
+
 .challenge-text {
     font-size: 12px;
 }
@@ -9,4 +17,15 @@
 
 .modal-button-container {
     padding-top: 20px;
+}
+
+/*Stats Section*/
+
+.stats-container {
+    margin: 0 auto;
+    width: 100%;
+}
+
+.stats-container p {
+    font-family: 'Muli', sans-serif;
 }

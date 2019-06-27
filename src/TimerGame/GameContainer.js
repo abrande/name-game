@@ -1,8 +1,8 @@
 import React from "react";
 import {Button, Modal, Form, Container, Col, Alert, Row} from "react-bootstrap";
 import GameStats from "./GameStats";
-import "./timer-game.css";
 import Timer from "./Timer";
+import "./timer-game.css";
 
 class GameContainer extends React.Component {
     constructor(props) {
@@ -51,10 +51,10 @@ class GameContainer extends React.Component {
         this.props.mattGameSelected(!this.state.mattBoxSelected);
         this.setState({mattBoxSelected: !this.state.mattBoxSelected});
     }
+
     render() {
         return (
             <div className="game-container">
-                <Button variant="primary" onClick={this.handleShow}> Want a Challenge? </Button>
                 <Modal show={this.state.show} onHide={this.handleClose} size="lg">
                     <Modal.Header closeButton>
                         Challenge Options
@@ -178,21 +178,26 @@ class GameContainer extends React.Component {
                         </Container>
                     </Modal.Body>
                 </Modal>
-
                 {this.state.rulesSet ?
                     <div>
-                        <Timer
-                            timerAmountSelected={this.state.timerAmountSelected}
-                        />
-                        <GameStats
-                            correctGuesses={this.props.correctGuesses}
-                            incorrectGuesses={this.props.incorrectGuesses}
-                            gameLevel={this.state.gameLevel}
-                            setRules={this.state.rulesSet}
-                        />
+                        <Row>
+                            <Col md={12}>
+                                <Timer
+                                    timerAmountSelected={this.state.timerAmountSelected}
+                                />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <GameStats
+                                correctGuesses={this.props.correctGuesses}
+                                incorrectGuesses={this.props.incorrectGuesses}
+                                gameLevel={this.state.gameLevel}
+                                setRules={this.state.rulesSet}
+                            />
+                        </Row>
                     </div>
                     : null}
-
+                <Button variant="primary" onClick={this.handleShow}> Want a Challenge? </Button>
             </div>
         )
     }

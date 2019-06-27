@@ -1,7 +1,7 @@
 .countdown-timer {
-    position: absolute;
-    width: 52px;
-    height: 52px;
+    width: 75px;
+    height: 75px;
+    margin: 0 auto;
 }
 
 .countdown-timer__circle circle {

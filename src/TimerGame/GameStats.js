@@ -58,14 +58,14 @@ class GameStats extends React.Component {
         return (
             <div className="stats-container">
                 <Row>
-                    <Col md={3} xs={6}>
-                        Correct: {this.props.correctGuesses}
+                    <Col md={{span: 2, offset: 3}} xs={{span: 2, offset: 3}}>
+                        <p>Correct: {this.props.correctGuesses}</p>
                     </Col>
-                    <Col md={3} xs={6}>
-                        Incorrect: {this.props.incorrectGuesses}
+                    <Col md={2} xs={2}>
+                        <p>Incorrect: {this.props.incorrectGuesses}</p>
                     </Col>
-                    <Col md={3} xs={6}>
-                        Total Score: {this.calculateTotal()}
+                    <Col md={2} xs={2}>
+                        <p>Total Score: {this.calculateTotal()}</p>
                     </Col>
                 </Row>
             </div>

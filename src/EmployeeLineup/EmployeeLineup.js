@@ -95,7 +95,7 @@ class EmployeeLineup extends React.Component {
     render() {
         return (
             <div className="employee-lineup-container">
-                <h1>Who is {this.state.employeeToGuess.firstName} {this.state.employeeToGuess.lastName}?</h1>
+                <h1 className="question-header">Who is {this.state.employeeToGuess.firstName} {this.state.employeeToGuess.lastName}?</h1>
                 <div className="lineup-container">
                     <Container fluid>
                         <Row>

@@ -1,5 +1,16 @@
-.lineup-container {
+@import url('https://fonts.googleapis.com/css?family=Buda:300|Muli&display=swap');
+
+.employee-lineup-container {
     padding-top: 45px;
+    border: 3px solid #30d8c3;
+    width: 90%;
+    margin: 0 auto;
+    padding-bottom: 50px;
+}
+
+.question-header {
+    padding-bottom: 20px;
+    font-family: 'Roboto', sans-serif;
 }
 
 .employee-thumbnail{

@@ -1,7 +1,6 @@
 import React from 'react';
 import EmployeeLineup from "./EmployeeLineup/EmployeeLineup";
 import GameContainer from "./TimerGame/GameContainer";
-import Jumbotron from "react-bootstrap/es/Jumbotron";
 import './App.css';
 
 class App extends React.Component {
@@ -77,16 +76,17 @@ class App extends React.Component {
     render() {
         return (
             <div className="App">
-                <h1>Willow Tree Name Game</h1>
+                <div className="main-header-section">
+                    <h1 className="main-header">WillowTree Name Game</h1>
+                    <hr/>
+                </div>
+                {this.renderLineup()}
                 <GameContainer
                     correctGuesses={this.state.correctGuesses}
                     incorrectGuesses={this.state.incorrectGuesses}
                     startKeepingScore={this.gameStarted}
                     mattGameSelected={this.mattOptionSelected}
                 />
-                <Jumbotron fluid>
-                    {this.renderLineup()}
-                </Jumbotron>
             </div>
         )
     }
