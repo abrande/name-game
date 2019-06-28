@@ -6,7 +6,6 @@
 
 .countdown-timer__circle circle {
     stroke-dasharray: 151px;
-    stroke-dashoffset: 151px;
     stroke-linecap: butt;
     stroke-width: 4px;
     stroke: #fd4f57;
@@ -21,9 +20,8 @@
 
 .countdown-timer__text {
     position: absolute;
-    top: 17px;
-    width: 52px;
-
+    top: 16px;
+    width: 77px;
     font-size: 14px;
     font-weight: 600;
     text-align: center;

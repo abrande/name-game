@@ -19,6 +19,11 @@
     padding-top: 20px;
 }
 
+.note-to-user {
+    padding: 4px;
+    width: 75%;
+    font-size: 13px;
+}
 /*Stats Section*/
 
 .stats-container {

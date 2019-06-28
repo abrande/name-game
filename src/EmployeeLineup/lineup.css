@@ -13,12 +13,16 @@
     font-family: 'Roboto', sans-serif;
 }
 
-.employee-thumbnail{
+.employee-thumbnail-card {
     height: 100%;
     width: 100%;
     cursor: pointer;
 }
 
+.employee-thumbnail {
+    height: 100%;
+    width: 100%;
+}
 
 .card-img-overlay-success {
     background-color: rgba(0, 255, 0, .5);

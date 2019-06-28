@@ -1,6 +1,7 @@
 import React from 'react';
 import EmployeeLineup from "./EmployeeLineup/EmployeeLineup";
 import GameContainer from "./TimerGame/GameContainer";
+import {Alert} from "react-bootstrap";
 import './App.css';
 
 class App extends React.Component {
@@ -14,11 +15,9 @@ class App extends React.Component {
             gameStarted: false,
             mattGameSelected: false
         };
-        this.addGamePoint = this.addGamePoint.bind(this);
-        this.removeGamePoint = this.removeGamePoint.bind(this);
         this.gameStarted = this.gameStarted.bind(this);
         this.mattOptionSelected = this.mattOptionSelected.bind(this);
-
+        this.handlePoints = this.handlePoints.bind(this);
     }
 
     componentDidMount() {
@@ -39,14 +38,14 @@ class App extends React.Component {
         this.setState({employees: employeeList});
     }
 
-    addGamePoint() {
-        let guess = this.state.correctGuesses + 1;
-        this.setState({correctGuesses: guess});
-    }
-
-    removeGamePoint() {
-        let guess = this.state.incorrectGuesses + 1;
-        this.setState({incorrectGuesses: guess});
+    handlePoints(wasMatch) {
+        if (wasMatch) {
+            let correctGuess = this.state.correctGuesses + 1;
+            this.setState({correctGuesses: correctGuess});
+        } else {
+            let incorrectGuess = this.state.incorrectGuesses + 1;
+            this.setState({incorrectGuesses: incorrectGuess});
+        }
     }
 
     gameStarted(gameStarted) {
@@ -63,8 +62,7 @@ class App extends React.Component {
                 <div>
                     <EmployeeLineup
                         employees={this.state.employees}
-                        addPoint={this.addGamePoint}
-                        removePoint={this.removeGamePoint}
+                        handlePoints={this.handlePoints}
                         startKeepingScore={this.state.startKeepingScore}
                         mattGameSelected={this.state.mattGameSelected}
                     />
@@ -80,13 +78,17 @@ class App extends React.Component {
                     <h1 className="main-header">WillowTree Name Game</h1>
                     <hr/>
                 </div>
-                {this.renderLineup()}
-                <GameContainer
-                    correctGuesses={this.state.correctGuesses}
-                    incorrectGuesses={this.state.incorrectGuesses}
-                    startKeepingScore={this.gameStarted}
-                    mattGameSelected={this.mattOptionSelected}
-                />
+                {!this.state.error ?
+                    <div>
+                    {this.renderLineup()}
+                    <GameContainer
+                        correctGuesses={this.state.correctGuesses}
+                        incorrectGuesses={this.state.incorrectGuesses}
+                        startKeepingScore={this.gameStarted}
+                        mattGameSelected={this.mattOptionSelected}
+                    />
+                    </div>
+                    : <Alert variant="danger">We seem to be having internal issues at the moment. Apologies for the inconvenience.</Alert>}
             </div>
         )
     }

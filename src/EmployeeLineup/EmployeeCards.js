@@ -1,7 +1,6 @@
 import React from "react";
 import {Card} from "react-bootstrap";
 
-
 class EmployeeCards extends React.Component {
     returnResults(index) {
         this.props.checkMatch(index, this.props.isMatch);
@@ -28,7 +27,7 @@ class EmployeeCards extends React.Component {
     render() {
         const {employee, index} = this.props;
         return (
-            <Card className={`bg-dark text-white`} onClick={() => this.returnResults(index)}>
+            <Card className="bg-dark text-white employee-thumbnail-card" onClick={() => this.returnResults(index)}>
                 <Card.Img src={employee.headshot.url} alt={employee.headshot.alt} thumbnail="true"
                           className="employee-thumbnail"/>
                 {this.returnOverlay(employee)}

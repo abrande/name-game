@@ -31,7 +31,7 @@ class EmployeeLineup extends React.Component {
         let selected;
         if (this.props.mattGameSelected) {
             let matts = this.props.employees.filter(employee => {
-                return employee.firstName.toLowerCase.startsWith("mat");
+                return employee.firstName.toLowerCase().startsWith("mat");
             });
             selected = getRandomSelection(matts, 5);
         }
@@ -59,10 +59,10 @@ class EmployeeLineup extends React.Component {
 
         if (this.props.startKeepingScore) {
             if (isMatch) {
-                this.props.addPoint();
+                this.props.handlePoints(true);
             }
             else {
-                this.props.removePoint();
+                this.props.handlePoints(false);
             }
         }
 

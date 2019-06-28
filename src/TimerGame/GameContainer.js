@@ -2,6 +2,7 @@ import React from "react";
 import {Button, Modal, Form, Container, Col, Alert, Row} from "react-bootstrap";
 import GameStats from "./GameStats";
 import Timer from "./Timer";
+import {getFinalScore} from "../utils/gameScoreHelper";
 import "./timer-game.css";
 
 class GameContainer extends React.Component {
@@ -9,16 +10,38 @@ class GameContainer extends React.Component {
         super(props);
         this.state = {
             show: false,
-            gameLevel: 0,
-            rulesSet: false,
+            gameLevel: 1,
+            beginNewGame: false,
             mattBoxSelected: false,
-            timerAmountSelected: 0
+            timerAmountSelected: 0,
+            timerFinished: false,
+            finishedTime: 0,
+            gameWon: false,
+            totalScore: 0,
+            showResults: "hide"
         };
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.startGame = this.startGame.bind(this);
-        this.clearRules = this.clearRules.bind(this);
         this.setMattChallenge = this.setMattChallenge.bind(this);
+        this.setTimerFinished = this.setTimerFinished.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        if (this.state.beginNewGame) {
+            if (nextProps.correctGuesses !== this.props.correctGuesses || nextProps.incorrectGuesses !== this.props.incorrectGuesses) {
+                let total = getFinalScore(this.state.gameLevel, this.props.correctGuesses, this.props.incorrectGuesses);
+                this.setState({totalScore: total});
+            }
+        }
+    }
+
+    handleClose() {
+        this.setState({show: false});
+    }
+
+    handleShow() {
+        this.setState({show: true, timerAmountSelected: 0, beginNewGame: false});
     }
 
     setRules(level) {
@@ -27,29 +50,97 @@ class GameContainer extends React.Component {
 
     startGame() {
         this.props.startKeepingScore(true);
-        this.setState({rulesSet: true, show: false});
+        this.setState({
+            beginNewGame: true,
+            show: false,
+            timerFinished: false,
+            gameWon: false,
+            finishedTime: 0,
+            showResults: "hide",
+            gameTotalResults: 0
+        });
     }
 
-    clearRules() {
-        this.props.startKeepingScore(false);
-        this.setState({gameLevel: 0, setRules: false, show: false});
-    }
-
-    handleClose() {
-        this.setState({show: false});
-    }
-
-    handleShow() {
-        this.setState({show: true});
-    }
-
-    setTime(time) {
+    setTime (time) {
         this.setState({timerAmountSelected: time});
     }
 
     setMattChallenge() {
         this.props.mattGameSelected(!this.state.mattBoxSelected);
         this.setState({mattBoxSelected: !this.state.mattBoxSelected});
+    }
+
+    setTimerFinished (finishedTime) {
+        this.setState({timerFinished: true, finishedTime: finishedTime, showResults: "show"});
+        this.gameWon();
+    }
+
+    gameWon() {
+        if (this.state.totalScore > 5) {
+            this.setState({gameWon: true})
+        }
+        else {
+            this.setState({gameWon: false})
+
+        }
+    }
+
+    returnFinalScore () {
+        if (this.state.timerFinished && this.state.gameWon) {
+            return (
+                <Alert variant="success" className={this.state.showResults}>You won the game with {this.state.totalScore} points! </Alert>
+            )
+        }
+        else if (this.state.timerFinished && this.state.timerAmountSelected && !this.state.gameWon && !this.state.show) {
+            return (
+                <Alert variant="danger" className={this.state.showResults}>No win this time, but I believe in you!</Alert>
+            )
+        }
+        else {
+            return null;
+        }
+    }
+
+    returnGameStatsSection() {
+        if (this.state.beginNewGame) {
+            if (this.state.timerAmountSelected) {
+                return (
+                    <div>
+                        <p>Get to 100 points before the timer runs out!</p>
+                        <Row>
+                            <Col md={12}>
+                                <Timer
+                                    timerAmountSelected={this.state.timerAmountSelected}
+                                    timerFinished={this.setTimerFinished}
+                                    timerStopped={this.state.timerFinished}
+                                    beginNewGame={this.state.beginNewGame}
+                                    modalIsVisible={this.state.show}
+                                />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <GameStats
+                                correctGuesses={this.props.correctGuesses}
+                                incorrectGuesses={this.props.incorrectGuesses}
+                                totalScore={this.state.totalScore}
+                                timerAmountSelected={this.state.timerAmountSelected}
+                            />
+                        </Row>
+                    </div>
+                )
+            } else {
+                return (
+                    <Row>
+                        <GameStats
+                            correctGuesses={this.props.correctGuesses}
+                            incorrectGuesses={this.props.incorrectGuesses}
+                            totalScore={this.state.totalScore}
+                            timerAmountSelected={this.state.timerAmountSelected}
+                        />
+                    </Row>
+                )
+            }
+        }
     }
 
     render() {
@@ -61,6 +152,7 @@ class GameContainer extends React.Component {
                     </Modal.Header>
                     <Modal.Body>
                         <Container fluid>
+                            <Alert variant="warning" className="note-to-user">Note: If no timer is selected you will only see how many correct guesses you have</Alert>
                             <p>Choose level of difficulty</p>
                             <Form>
                                 <Row>
@@ -119,14 +211,6 @@ class GameContainer extends React.Component {
                                         </Alert>
                                     </Col>
                                 </Row>
-                                <Form.Check
-                                    type="checkbox"
-                                    label="show stats"
-                                    name="formHorizontalRadios"
-                                    id="formHorizontalRadios1"
-                                    className="challenge-text"
-                                    onChange={this.startGame}
-                                />
                             </Form>
                             <hr/>
                             <p>How much time do you want?</p>
@@ -156,9 +240,8 @@ class GameContainer extends React.Component {
                                 name="formHorizontalRadios"
                                 id="formHorizontalRadios1"
                                 className="challenge-text"
-                                onChange={this.setTime.bind(this, -1)}
-                                checked={this.state.timerAmountSelected === -1}
-
+                                onChange={this.setTime.bind(this, 0)}
+                                checked={!this.state.timerAmountSelected}
                             />
                             <hr/>
                             <p>Extra</p>
@@ -173,30 +256,12 @@ class GameContainer extends React.Component {
                             />
                             <div className="modal-button-container">
                                 <Button variant="primary" size="sm" onClick={this.startGame}> Submit </Button>
-                                <Button variant="danger" size="sm" onClick={this.clearRules}> Clear Selection </Button>
                             </div>
                         </Container>
                     </Modal.Body>
                 </Modal>
-                {this.state.rulesSet ?
-                    <div>
-                        <Row>
-                            <Col md={12}>
-                                <Timer
-                                    timerAmountSelected={this.state.timerAmountSelected}
-                                />
-                            </Col>
-                        </Row>
-                        <Row>
-                            <GameStats
-                                correctGuesses={this.props.correctGuesses}
-                                incorrectGuesses={this.props.incorrectGuesses}
-                                gameLevel={this.state.gameLevel}
-                                setRules={this.state.rulesSet}
-                            />
-                        </Row>
-                    </div>
-                    : null}
+                {this.returnFinalScore()}
+                {this.returnGameStatsSection()}
                 <Button variant="primary" onClick={this.handleShow}> Want a Challenge? </Button>
             </div>
         )

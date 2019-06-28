@@ -6,11 +6,24 @@ class Timer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            timeRemainingInSeconds: this.props.timerAmountSelected
+            timeRemainingInSeconds: null
         };
     }
 
     componentDidMount() {
+        this.startTimer()
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.timerAmountSelected !== this.props.timerAmountSelected) {
+            clearInterval(this.timer);
+            this.startTimer();
+        }
+    }
+
+    startTimer() {
+        this.setState({timeRemainingInSeconds: this.props.timerAmountSelected});
+        clearInterval(this.timer);
         this.timer = setInterval(() => {
             this.decrementTimeRemaining();
         }, 1000);
@@ -22,6 +35,7 @@ class Timer extends React.Component {
                 timeRemainingInSeconds: this.state.timeRemainingInSeconds - 1
             });
         } else {
+            this.props.timerFinished(this.state.timeRemainingInSeconds);
             clearInterval(this.timer);
         }
     };
@@ -40,7 +54,7 @@ class Timer extends React.Component {
                             cx="26"
                             cy="26"
                             style={{
-                                animation: `countdown-animation ${this.state.timerAmountSelected}s linear`
+                                animation: `countdown-animation ${this.props.timerAmountSelected}s linear`
                             }}
                         />
                     </svg>
