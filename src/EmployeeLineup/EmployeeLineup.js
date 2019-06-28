@@ -1,6 +1,6 @@
 import React from "react"
 import {Container, Row, Col} from "react-bootstrap";
-import {getRandomSelection, getRandomInt} from "../utils/randomHelpers";
+import {getRandomSelection, getRandomInt} from "../utils/randomSelectionHelpers";
 import EmployeeCards from "./EmployeeCards";
 import "./lineup.css";
 
