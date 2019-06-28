@@ -56,7 +56,6 @@ class EmployeeLineup extends React.Component {
                 selectedEmployees: wasSelected
             }))
         }
-
         if (this.props.startKeepingScore) {
             if (isMatch) {
                 this.props.handlePoints(true);
@@ -65,7 +64,6 @@ class EmployeeLineup extends React.Component {
                 this.props.handlePoints(false);
             }
         }
-
         if (isMatch) {
             setTimeout(this.handleCorrectGuess.bind(this), 500);
         }

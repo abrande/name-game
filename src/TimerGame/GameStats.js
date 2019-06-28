@@ -19,6 +19,6 @@ const GameStats = props => {
             </Row>
         </div>
     )
-}
+};
 
 export default GameStats;
