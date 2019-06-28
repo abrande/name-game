@@ -5,7 +5,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 This version of the Namegame app allows different features to learn employee names. Features include: 
 * Ability to click on employee thumbnails to guess the name questioned on the dashboard
     * Basic level is provided without any scores
-* Game option which includes options for:
+* Game option which includes a selection of:
     * Tracking for each correct and incorrect guess
     * Multiple levels of varying hardness
     * Total score (based on level of hardness)
